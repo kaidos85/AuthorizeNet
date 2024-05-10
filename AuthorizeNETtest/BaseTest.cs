@@ -2,6 +2,8 @@
 using System;
 using System.Configuration;
 using AuthorizeNet.Utility;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace AuthorizeNETtest
 {
@@ -14,9 +16,14 @@ namespace AuthorizeNETtest
         protected static readonly WebRequestCreateLocal LocalRequestObject = new WebRequestCreateLocal();
         protected string ApiLogin;
         protected string TransactionKey;
+        protected IConfigurationRoot _configuration;
 
         public BaseTest()
         {
+            _configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
 #if USELOCAL
             WebRequest.RegisterPrefix("https://", LocalRequestObject);
 #endif
@@ -27,8 +34,8 @@ namespace AuthorizeNETtest
         /// </summary>
         protected string CheckApiLoginTransactionKey()
         {
-            ApiLogin = AuthorizeNet.Test.UnitTestData.GetPropertyFromNames(AuthorizeNet.Util.Constants.EnvApiLoginid, AuthorizeNet.Util.Constants.PropApiLoginid);
-            TransactionKey = AuthorizeNet.Test.UnitTestData.GetPropertyFromNames(AuthorizeNet.Util.Constants.EnvTransactionKey, AuthorizeNet.Util.Constants.PropTransactionKey);
+            ApiLogin = _configuration["AppSettings:" + AuthorizeNet.Util.Constants.PropApiLoginid];
+            TransactionKey = _configuration["AppSettings:" + AuthorizeNet.Util.Constants.PropTransactionKey];
 
             string sRet = "";
             if ((string.IsNullOrEmpty(ApiLogin)) || (ApiLogin.Trim().Length == 0)
@@ -54,8 +61,8 @@ namespace AuthorizeNETtest
 
         private void LoadLoginTranskey()
         {
-            ApiLogin = ConfigurationManager.AppSettings["ApiLogin"];
-            TransactionKey = ConfigurationManager.AppSettings["TransactionKey"];
+            ApiLogin = _configuration["AppSettings:" + "ApiLogin"];
+            TransactionKey = _configuration["AppSettings:" + "TransactionKey"];
         }
 
         protected decimal getValidAmount()
