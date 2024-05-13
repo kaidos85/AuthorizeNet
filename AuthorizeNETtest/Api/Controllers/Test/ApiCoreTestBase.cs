@@ -10,8 +10,8 @@ namespace AuthorizeNet.Api.Controllers.Test
     using AuthorizeNet.Api.Controllers.Bases;
     using AuthorizeNet.Test;
     using AuthorizeNet.Util;
+    using Moq;
     using NUnit.Framework;
-    using NMock;
 
     // ReSharper disable FieldCanBeMadeReadOnly.Local
     // ReSharper disable NotAccessedField.Local
@@ -64,7 +64,7 @@ namespace AuthorizeNet.Api.Controllers.Test
         protected paymentType PaymentOne;
         protected payPalType PayPalOne;
 
-        protected MockFactory MockContext = null;
+        protected Mock MockContext = null;
         private readonly AnetRandom _random = new AnetRandom();
 	    static ApiCoreTestBase() {
 
@@ -93,7 +93,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 	        ErrorMessages = new Dictionary<string, string>();
 	    }
 
-	    [TestFixtureSetUp]
+	    [OneTimeSetUp]
         public static void SetUpBeforeClass()//TestContext context)
         {
             ErrorMessages.Clear();
@@ -108,7 +108,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 		    ErrorMessages.Add("E00095", "ShippingProfileId is not provided within Customer Profile.");
         }
 
-	    [TestFixtureTearDown]
+	    [OneTimeTearDown]
         public static void TearDownAfterClass()
         {
 	    }

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Configuration;
-using AuthorizeNet.Utility;
+using AuthorizeNet.Util;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 

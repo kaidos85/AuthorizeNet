@@ -1,4 +1,4 @@
-﻿using AuthorizeNet.Utility;
+﻿using AuthorizeNet.Util;
 
 namespace AuthorizeNet.Api.Controllers.SampleTest
 {
@@ -13,13 +13,13 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
     [TestFixture]
     public class CreateECheckTransactionSampleTest : ApiCoreTestBase
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public new static void SetUpBeforeClass()
         {
             ApiCoreTestBase.SetUpBeforeClass();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public new static void TearDownAfterClass()
         {
             ApiCoreTestBase.TearDownAfterClass();

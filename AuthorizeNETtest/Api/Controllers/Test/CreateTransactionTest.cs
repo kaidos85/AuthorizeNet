@@ -7,19 +7,21 @@ namespace AuthorizeNet.Api.Controllers.Test
     using AuthorizeNet.Api.Contracts.V1;
     using AuthorizeNet.Api.Controllers;
     using AuthorizeNet.Api.Controllers.Bases;
+    using AuthorizeNet.Utility;
     using AuthorizeNet.Util;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class CreateTransactionTest : ApiCoreTestBase
     {
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public new static void SetUpBeforeClass()
         {
             ApiCoreTestBase.SetUpBeforeClass();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public new static void TearDownAfterClass()
         {
             ApiCoreTestBase.TearDownAfterClass();
@@ -74,17 +76,17 @@ namespace AuthorizeNet.Api.Controllers.Test
             var createResponse = createController.GetApiResponse();
 
             //validate response
-            Assert.IsNotNull(createResponse.transactionResponse);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse);
             LogHelper.info(Logger, "Response: {0}", createResponse);
             DisplayResponse(createResponse, "Create Transaction Response");
             LogHelper.info(Logger, "Created Transaction: {0}", createResponse.transactionResponse);
-            Assert.IsNotNull(createResponse.transactionResponse.transId);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse.transId);
             long transId;
-            Assert.IsTrue(long.TryParse(createResponse.transactionResponse.transId, out transId));
+            ClassicAssert.IsTrue(long.TryParse(createResponse.transactionResponse.transId, out transId));
             if (0 == transId)
             {
                 ValidateFailure<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
-                Assert.IsNotNull(createResponse.transactionResponse.errors);
+                ClassicAssert.IsNotNull(createResponse.transactionResponse.errors);
                 foreach (var error in createResponse.transactionResponse.errors)
                 {
                     LogHelper.info(Logger, "Error-> Code:{0}, Text:{1}", error.errorCode, error.errorText);
@@ -92,21 +94,21 @@ namespace AuthorizeNet.Api.Controllers.Test
             }
             else
             {
-                Assert.AreNotEqual(0, transId);
+                ClassicAssert.AreNotEqual(0, transId);
                 ValidateSuccess<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
             }
             var profileResponse = createResponse.profileResponse;
-            Assert.IsNotNull(profileResponse);
-            Assert.IsNotNull(profileResponse.customerProfileId);
-            Assert.IsNotNull(profileResponse.customerPaymentProfileIdList);
-            Assert.IsNotNull(profileResponse.customerShippingAddressIdList);
-            Assert.AreNotEqual("0", profileResponse.customerProfileId);
+            ClassicAssert.IsNotNull(profileResponse);
+            ClassicAssert.IsNotNull(profileResponse.customerProfileId);
+            ClassicAssert.IsNotNull(profileResponse.customerPaymentProfileIdList);
+            ClassicAssert.IsNotNull(profileResponse.customerShippingAddressIdList);
+            ClassicAssert.AreNotEqual("0", profileResponse.customerProfileId);
 
-            Assert.AreEqual(1, profileResponse.customerPaymentProfileIdList.Length);
-            Assert.AreNotEqual("0", profileResponse.customerPaymentProfileIdList[0]);
+            ClassicAssert.AreEqual(1, profileResponse.customerPaymentProfileIdList.Length);
+            ClassicAssert.AreNotEqual("0", profileResponse.customerPaymentProfileIdList[0]);
 
-            Assert.AreEqual(1, profileResponse.customerShippingAddressIdList.Length);
-            Assert.AreNotEqual("0", profileResponse.customerShippingAddressIdList[0]);
+            ClassicAssert.AreEqual(1, profileResponse.customerShippingAddressIdList.Length);
+            ClassicAssert.AreNotEqual("0", profileResponse.customerShippingAddressIdList[0]);
         }
         
         /// <summary>
@@ -202,12 +204,12 @@ namespace AuthorizeNet.Api.Controllers.Test
 
             createController = CreateTransactionRequestTest(chargedTransactionRequest);
             createResponse = createController.ExecuteWithApiResponse();
-            Assert.IsNotNull(createResponse);
+            ClassicAssert.IsNotNull(createResponse);
             //currently the transaction is failing because the bug fix is on server end
             var errorResponse = createResponse.messages;
-            Assert.AreEqual(1, errorResponse.message.Length);
-            Assert.AreEqual("E00051", errorResponse.message[0].code);
-            Assert.AreEqual(errorResponse.message[0].text, "The original transaction was not issued for this payment profile.");
+            ClassicAssert.AreEqual(1, errorResponse.message.Length);
+            ClassicAssert.AreEqual("E00051", errorResponse.message[0].code);
+            ClassicAssert.AreEqual(errorResponse.message[0].text, "The original transaction was not issued for this payment profile.");
        }
 
         /// <summary>
@@ -239,18 +241,18 @@ namespace AuthorizeNet.Api.Controllers.Test
             if (createResponse == null)
                 throw new ArgumentNullException("createResponse");
 
-            Assert.IsNotNull(createResponse.transactionResponse);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse);
             LogHelper.info(Logger, "Response: {0}", createResponse);
             DisplayResponse(createResponse, "Create Transaction Response");
             LogHelper.info(Logger, "Created Transaction: {0}", createResponse.transactionResponse);
-            Assert.IsNotNull(createResponse.transactionResponse.transId);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse.transId);
             long transId;
-            Assert.IsTrue(long.TryParse(createResponse.transactionResponse.transId, out transId));
+            ClassicAssert.IsTrue(long.TryParse(createResponse.transactionResponse.transId, out transId));
             
             if (0 == transId)
             {
                 ValidateFailure<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
-                Assert.IsNotNull(createResponse.transactionResponse.errors);
+                ClassicAssert.IsNotNull(createResponse.transactionResponse.errors);
                 foreach (var error in createResponse.transactionResponse.errors)
                 {
                     LogHelper.info(Logger, "Error-> Code:{0}, Text:{1}", error.errorCode, error.errorText);
@@ -259,15 +261,15 @@ namespace AuthorizeNet.Api.Controllers.Test
             else
             {
                 ValidateSuccess<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
-                Assert.AreNotEqual(0, transId);
+                ClassicAssert.AreNotEqual(0, transId);
             }
 
             var profileResponse = createResponse.profileResponse;
-            Assert.IsNotNull(profileResponse);
-            Assert.IsNotNull(profileResponse.customerProfileId);
-            Assert.IsNotNull(profileResponse.customerPaymentProfileIdList);
-            Assert.AreEqual("",profileResponse.customerShippingAddressIdList);
-            Assert.AreNotEqual("0", profileResponse.customerProfileId);
+            ClassicAssert.IsNotNull(profileResponse);
+            ClassicAssert.IsNotNull(profileResponse.customerProfileId);
+            ClassicAssert.IsNotNull(profileResponse.customerPaymentProfileIdList);
+            ClassicAssert.AreEqual("",profileResponse.customerShippingAddressIdList);
+            ClassicAssert.AreNotEqual("0", profileResponse.customerProfileId);
 
             Assert.AreEqual(1, profileResponse.customerPaymentProfileIdList.Length);
             Assert.AreNotEqual("0", profileResponse.customerPaymentProfileIdList[0]);

@@ -8,6 +8,9 @@
     <DocumentationFile>bin/Debug/AuthorizeNet.XML</DocumentationFile>
     <NoWarn>0219,1591,1635</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+	<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin/Release</OutputPath>
     <DocumentationFile>bin/Release/AuthorizeNet.XML</DocumentationFile>
@@ -20,7 +23,23 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+	<Compile Include="Api\Contracts\V1\*.cs" />
+	<Compile Include="Api\Controllers\Bases\*.cs" />
+	<Compile Include="Util\*.cs" />
+	<Compile Include="Utility\*.cs" />  
+  </ItemGroup>	
+  <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
-  </ItemGroup>  
+  </ItemGroup>
+  <ItemGroup>
+	<Compile Remove="Api\Controllers\createFingerPrintController.cs" />
+	<Compile Remove="Api\Controllers\transactionResponseEmvController.cs" />
+	<Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Environment.cs" />
+    <Compile Include="MarketType.cs" />
+    <Compile Include="TestFriends.cs" />
+  </ItemGroup>
 </Project>
