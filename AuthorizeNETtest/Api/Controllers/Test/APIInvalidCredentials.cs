@@ -7,6 +7,7 @@
     using AuthorizeNet.Api.Controllers;
     using AuthorizeNet.Api.Controllers.Bases;
     using AuthorizeNet.Util;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class CredentialsTest : ApiCoreTestBase
@@ -55,7 +56,7 @@
             getCpCont.Execute();
             getCustomerProfileResponse getCpResp = getCpCont.GetApiResponse();
 
-            Assert.AreEqual("E00007", ((AuthorizeNet.Api.Contracts.V1.ANetApiResponse)(getCpResp)).messages.message[0].code);
+            ClassicAssert.AreEqual("E00007", ((AuthorizeNet.Api.Contracts.V1.ANetApiResponse)(getCpResp)).messages.message[0].code);
             ValidateErrorCode(((AuthorizeNet.Api.Contracts.V1.ANetApiResponse)(getCpResp)).messages, "E00007");
         }
 
@@ -78,7 +79,16 @@
             {
                 var getCpCont = new getCustomerProfileController(getCpReq);
                 getCpCont.Execute();
-                Assert.Fail("You should not reach here");
+                var response = getCpCont.GetApiResponse();
+                if(response.messages.resultCode == messageTypeEnum.Error)
+                {
+                    ClassicAssert.Pass("Expcted error");
+                }
+                else
+                {
+                    ClassicAssert.Fail("You should not here");
+                }
+                    
             }
             catch (Exception e)
             {

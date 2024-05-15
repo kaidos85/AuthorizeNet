@@ -271,10 +271,10 @@ namespace AuthorizeNet.Api.Controllers.Test
             ClassicAssert.AreEqual("",profileResponse.customerShippingAddressIdList);
             ClassicAssert.AreNotEqual("0", profileResponse.customerProfileId);
 
-            Assert.AreEqual(1, profileResponse.customerPaymentProfileIdList.Length);
-            Assert.AreNotEqual("0", profileResponse.customerPaymentProfileIdList[0]);
+            ClassicAssert.AreEqual(1, profileResponse.customerPaymentProfileIdList.Length);
+            ClassicAssert.AreNotEqual("0", profileResponse.customerPaymentProfileIdList[0]);
 
-            Assert.AreEqual(0, profileResponse.customerShippingAddressIdList.Length);
+            ClassicAssert.AreEqual(0, profileResponse.customerShippingAddressIdList.Length);
            
         }
 
@@ -308,14 +308,14 @@ namespace AuthorizeNet.Api.Controllers.Test
             var createResponse = createController.GetApiResponse();
 
             //validate response
-            Assert.IsNull(createResponse);
+            ClassicAssert.IsNull(createResponse);
             var errorResponse = createController.GetErrorResponse();
-            Assert.IsNotNull(errorResponse);
-            Assert.IsNotNull(errorResponse.messages);
-            Assert.IsNotNull(errorResponse.messages.message);
-            Assert.AreEqual(messageTypeEnum.Error, errorResponse.messages.resultCode);
-            Assert.AreEqual(1, errorResponse.messages.message.Length);
-            Assert.AreEqual("E00003", errorResponse.messages.message[0].code);
+            ClassicAssert.IsNotNull(errorResponse);
+            ClassicAssert.IsNotNull(errorResponse.messages);
+            ClassicAssert.IsNotNull(errorResponse.messages.message);
+            ClassicAssert.AreEqual(messageTypeEnum.Error, errorResponse.messages.resultCode);
+            ClassicAssert.AreEqual(1, errorResponse.messages.message.Length);
+            ClassicAssert.AreEqual("E00003", errorResponse.messages.message[0].code);
             ValidateErrorCode(errorResponse.messages, "E00003");
         }
 
@@ -351,14 +351,14 @@ namespace AuthorizeNet.Api.Controllers.Test
             var decryptPaymentDataResponse = decryptPaymentDataController.GetApiResponse();
 
             //validate response
-            Assert.IsNotNull(decryptPaymentDataResponse);
+            ClassicAssert.IsNotNull(decryptPaymentDataResponse);
             LogHelper.info(Logger, "Response: {0}", decryptPaymentDataResponse);
-            Assert.IsNotNull(decryptPaymentDataResponse.messages);
-            Assert.IsNotNull(decryptPaymentDataResponse.messages.message);
-            Assert.AreEqual(decryptPaymentDataResponse.messages.resultCode, messageTypeEnum.Ok);
-            Assert.AreEqual(decryptPaymentDataResponse.billingInfo.firstName, "Authorize");
-            Assert.AreEqual(decryptPaymentDataResponse.billingInfo.lastName, "Tester");
-            Assert.AreEqual(decryptPaymentDataResponse.cardInfo.cardNumber, "XXXX4242");
+            ClassicAssert.IsNotNull(decryptPaymentDataResponse.messages);
+            ClassicAssert.IsNotNull(decryptPaymentDataResponse.messages.message);
+            ClassicAssert.AreEqual(decryptPaymentDataResponse.messages.resultCode, messageTypeEnum.Ok);
+            ClassicAssert.AreEqual(decryptPaymentDataResponse.billingInfo.firstName, "Authorize");
+            ClassicAssert.AreEqual(decryptPaymentDataResponse.billingInfo.lastName, "Tester");
+            ClassicAssert.AreEqual(decryptPaymentDataResponse.cardInfo.cardNumber, "XXXX4242");
         }
     }
 }

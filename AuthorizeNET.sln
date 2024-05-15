@@ -1,16 +1,12 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34902.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizeNET", "Authorize.NET\AuthorizeNET.csproj", "{5D52EAEC-42FB-4313-83B8-69E2F55EBF14}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizeNETtest", "AuthorizeNETtest\AuthorizeNETtest.csproj", "{CDA0D4D8-E4AA-4BEA-8839-04D69607D914}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7EBF48A1-8AC1-4E84-BDCC-E0984183D098}"
-	ProjectSection(SolutionItems) = preProject
-		AuthorizeNET.vsmdi = AuthorizeNET.vsmdi
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +30,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F4F3CF3-7B78-40D2-8E31-61557D7476B1}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = AuthorizeNET.vsmdi

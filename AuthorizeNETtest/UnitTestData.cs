@@ -2,8 +2,11 @@ namespace AuthorizeNet.Test
 {
     using System;
     using System.Configuration;
+    using System.IO;
     using System.Linq;
     using AuthorizeNet.Util;
+    using Castle.Core.Configuration;
+    using Microsoft.Extensions.Configuration;
 
     public abstract class UnitTestData
     {
@@ -12,12 +15,18 @@ namespace AuthorizeNet.Test
         protected static string MerchantMd5Key;
 
         private static readonly Log Logger = LogFactory.getLog(typeof(UnitTestData));
+        static IConfigurationRoot _configuration;
 
         /**
          * Default static constructor
          */
         static UnitTestData()
         {
+            _configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
             //getPropertyFromNames get the value from properties file or environment
             ApiLoginId = GetPropertyFromNames(Constants.EnvApiLoginid, Constants.PropApiLoginid);
             TransactionKey = GetPropertyFromNames(Constants.EnvTransactionKey, Constants.PropTransactionKey);
@@ -35,8 +44,8 @@ namespace AuthorizeNet.Test
 
         public static string GetPropertyFromNames(string pFirstName, string pSecondName)
         {
-            var value = AuthorizeNet.Environment.GetProperty(pFirstName) ??
-                                    AuthorizeNet.Environment.GetProperty(pSecondName);
+            var section = _configuration.GetSection("AppSettings");
+            var value = section[pFirstName] ?? section[pSecondName];
 
             return value;
         }

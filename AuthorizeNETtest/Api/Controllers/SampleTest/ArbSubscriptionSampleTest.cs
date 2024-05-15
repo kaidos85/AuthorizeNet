@@ -7,6 +7,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
     using AuthorizeNet.Api.Controllers.Test;
     using AuthorizeNet.Util;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class ArbSubscriptionSampleTest : ApiCoreTestBase {
@@ -51,7 +52,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var createController = new ARBCreateSubscriptionController(createRequest);
             createController.Execute();
             var createResponse = createController.GetApiResponse();
-            Assert.IsNotNull(createResponse.subscriptionId);
+            ClassicAssert.IsNotNull(createResponse.subscriptionId);
             LogHelper.info(Logger, "Created Subscription: {0}", createResponse.subscriptionId);
             var subscriptionId = createResponse.subscriptionId;
 
@@ -63,7 +64,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
 		        };
             var getController = new ARBGetSubscriptionStatusController(getRequest);
             var getResponse = getController.ExecuteWithApiResponse();
-		    Assert.IsNotNull(getResponse.status);
+		    ClassicAssert.IsNotNull(getResponse.status);
 		    Logger.info(String.Format("Subscription Status: {0}", getResponse.status));
 
             //get subscription list that contains only the subscription created above.
@@ -85,13 +86,13 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var listController = new ARBGetSubscriptionListController(listRequest);
             var listResponse = listController.ExecuteWithApiResponse();
             LogHelper.info(Logger, "Subscription Count: {0}", listResponse.totalNumInResultSet);
-            Assert.IsTrue(0 < listResponse.totalNumInResultSet);
+            ClassicAssert.IsTrue(0 < listResponse.totalNumInResultSet);
 
             //validation of list
             var subscriptionsArray = listResponse.subscriptionDetails;
             foreach (var aSubscription in subscriptionsArray)
             {
-                Assert.IsTrue(0 < aSubscription.id);
+                ClassicAssert.IsTrue(0 < aSubscription.id);
                 LogHelper.info(Logger, "Subscription Id: {0}, Status:{1}, PaymentMethod: {2}, Amount: {3}, Account:{4}",
                         aSubscription.id, aSubscription.status, aSubscription.paymentMethod, aSubscription.amount, aSubscription.accountNumber);
             }
@@ -105,7 +106,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             };
             var cancelController = new ARBCancelSubscriptionController(cancelRequest);
             var cancelResponse = cancelController.ExecuteWithApiResponse(TestEnvironment);
-            Assert.IsNotNull(cancelResponse.messages);
+            ClassicAssert.IsNotNull(cancelResponse.messages);
             Logger.info(String.Format("Subscription Cancelled: {0}", subscriptionId));
         }
 
@@ -127,7 +128,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var createController = new ARBCreateSubscriptionController(createRequest);
             createController.Execute();
             var createResponse = createController.GetApiResponse();
-            Assert.IsNotNull(createResponse.subscriptionId);
+            ClassicAssert.IsNotNull(createResponse.subscriptionId);
             LogHelper.info(Logger, "Created Subscription: {0}", createResponse.subscriptionId);
             var subscriptionId = createResponse.subscriptionId;
 
@@ -139,10 +140,10 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             };
             var getController = new ARBGetSubscriptionController(getRequest);
             var getResponse = getController.ExecuteWithApiResponse();
-            Assert.IsNotNull(getResponse.subscription);
+            ClassicAssert.IsNotNull(getResponse.subscription);
             Logger.info(String.Format("Subscription Name : {0}", getResponse.subscription.name));
-            Assert.AreEqual(ArbSubscriptionOne.name, getResponse.subscription.name);
-            Assert.AreEqual(ArbSubscriptionOne.amountSpecified, getResponse.subscription.amountSpecified);
+            ClassicAssert.AreEqual(ArbSubscriptionOne.name, getResponse.subscription.name);
+            ClassicAssert.AreEqual(ArbSubscriptionOne.amountSpecified, getResponse.subscription.amountSpecified);
 
             //cancel subscription
             var cancelRequest = new ARBCancelSubscriptionRequest
@@ -153,7 +154,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             };
             var cancelController = new ARBCancelSubscriptionController(cancelRequest);
             var cancelResponse = cancelController.ExecuteWithApiResponse(TestEnvironment);
-            Assert.IsNotNull(cancelResponse.messages);
+            ClassicAssert.IsNotNull(cancelResponse.messages);
             Logger.info(String.Format("Subscription Cancelled: {0}", subscriptionId));
         }
     }

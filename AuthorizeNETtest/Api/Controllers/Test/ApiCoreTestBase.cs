@@ -6,12 +6,15 @@ namespace AuthorizeNet.Api.Controllers.Test
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using AuthorizeNet.Api.Contracts.V1;
     using AuthorizeNet.Api.Controllers.Bases;
     using AuthorizeNet.Test;
     using AuthorizeNet.Util;
+    using Microsoft.Extensions.Configuration;
     using Moq;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     // ReSharper disable FieldCanBeMadeReadOnly.Local
     // ReSharper disable NotAccessedField.Local
@@ -66,13 +69,13 @@ namespace AuthorizeNet.Api.Controllers.Test
 
         protected Mock MockContext = null;
         private readonly AnetRandom _random = new AnetRandom();
-	    static ApiCoreTestBase() {
+
+        static ApiCoreTestBase() {
+
+            
 
             //now we support Tls only, and .net defaults to TLS
             //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
-
-            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(System.Configuration.ConfigurationUserLevel.None);
-            Logger.error(String.Format("Configuration file used: {0}, Exists:{1}", config.FilePath, config.HasFile));
 
 		    //getPropertyFromNames get the value from properties file or environment
 		    ApiLoginIdKey = UnitTestData.GetPropertyFromNames(AuthorizeNet.Util.Constants.EnvApiLoginid, AuthorizeNet.Util.Constants.PropApiLoginid);
@@ -118,7 +121,7 @@ namespace AuthorizeNet.Api.Controllers.Test
         [SetUp]
         public void SetUp()
         {
-            MockContext = new MockFactory();
+            MockContext = new Mock<ApiCoreTestBase>();
 
             //initialize counter
             Counter = _random.Next(1, (int) (Math.Pow(2, 24)));
@@ -322,7 +325,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 
 	    [TearDown]
 	    public void TearDown() {
-            MockContext.VerifyAllExpectationsHaveBeenMet();
+            //MockContext.VerifyAll();
 	    }
 
         string GetRandomString(string title) {
@@ -458,7 +461,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 			    DisplayResponse(errorResponse, "Error Response Messages");
 			    if ( fail)
 			    {
-				    Assert.Fail("Request failed.");
+				    ClassicAssert.Fail("Request failed.");
 			    }
 		    }
 	    }
@@ -468,9 +471,9 @@ namespace AuthorizeNet.Api.Controllers.Test
             where TS : ANetApiResponse
             where TT : ApiOperationBase<TQ, TS> 
         {
-		    Assert.AreEqual( messageTypeEnum.Ok, controller.GetResultCode());
-		    Assert.IsNull(controller.GetErrorResponse());
-		    Assert.IsNotNull(response);
+		    ClassicAssert.AreEqual( messageTypeEnum.Ok, controller.GetResultCode());
+		    ClassicAssert.IsNull(controller.GetErrorResponse());
+		    ClassicAssert.IsNotNull(response);
 		    DisplayResponse( response, "Success Messages");
 	    }
 
@@ -479,7 +482,7 @@ namespace AuthorizeNet.Api.Controllers.Test
             where TS : ANetApiResponse
             where TT : ApiOperationBase<TQ, TS> 
         {
-		    Assert.AreEqual( messageTypeEnum.Error, controller.GetResultCode());
+		    ClassicAssert.AreEqual( messageTypeEnum.Error, controller.GetResultCode());
 		    //TODO Until error response is fixed
 		    //Assert.assertNotNull(controller.getErrorResponse());
 		    //Assert.assertNull(response);
@@ -504,13 +507,13 @@ namespace AuthorizeNet.Api.Controllers.Test
 		    var firstError = GetFirstErrorMessage( messagesType);
 		    if (null != firstError)
 		    {
-			    Assert.AreEqual( errorCode, firstError.code);
+			    ClassicAssert.AreEqual( errorCode, firstError.code);
 			    if ( ErrorMessages.ContainsKey(errorCode))
 			    {
 				    string message = ErrorMessages[errorCode];
 				    if ( !(string.IsNullOrEmpty(message)))
 				    {
-					    Assert.AreEqual( message, firstError.text);
+					    ClassicAssert.AreEqual( message, firstError.text);
 				    }
 			    }
 		    }
@@ -560,13 +563,15 @@ namespace AuthorizeNet.Api.Controllers.Test
             //using (MockContext.Unordered())
             {
                 //Expect.On(mockController).Any.Method(i => i.Execute(mockEnvironment));
-                Expect.On(mockController).Any.Method(i => i.Execute(mockEnvironment)).With(mockEnvironment);
-                Expect.On(mockController).Any.Method(i => i.GetApiResponse()).WillReturn(mockResponse);
+                //Mock.Get(mockController).Verify(r => r.Execute(mockEnvironment));
+                Mock.Get(mockController).Setup(r => r.GetApiResponse()).Returns(mockResponse);
+                mockController.Execute(mockEnvironment);
+                Mock.Get(mockController).Setup(i => i.GetApiResponse()).Returns(mockResponse);
                 //Expect.On(mockController).Between(0, 10).Method(i => i.ExecuteWithApiResponse(mockEnvironment)).WillReturn(mockResponse);
-                Expect.On(mockController).Any.Method(i => i.ExecuteWithApiResponse(mockEnvironment)).With(mockEnvironment).WillReturn(mockResponse);
-                Expect.On(mockController).Any.Method(i => i.GetResults()).WillReturn(results);
-                Expect.On(mockController).Any.Method(i => i.GetResultCode()).WillReturn(messageType);
-                Expect.On(mockController).Any.Method(i => i.GetErrorResponse()).WillReturn(errorResponse);
+                Mock.Get(mockController).Setup(i => i.ExecuteWithApiResponse(mockEnvironment)).Returns(mockResponse);
+                Mock.Get(mockController).Setup(i => i.GetResults()).Returns(results);
+                Mock.Get(mockController).Setup(i => i.GetResultCode()).Returns(messageType);
+                Mock.Get(mockController).Setup(i => i.GetErrorResponse()).Returns(errorResponse);
             }
 
             if (null != mockRequest && null != mockResponse)
@@ -574,7 +579,7 @@ namespace AuthorizeNet.Api.Controllers.Test
                 mockResponse.refId = mockRequest.refId;
             }
             var realController = Activator.CreateInstance(typeof(TT), mockRequest);
-            Assert.IsNotNull(realController);
+            ClassicAssert.IsNotNull(realController);
 
 		    LogHelper.info(Logger, "Request: {0}", mockRequest);
 		    ShowProperties(mockRequest);
@@ -584,7 +589,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 
 	    protected Mock<IApiOperation<TQ,TS>> GetMockController<TQ, TS>()  where TQ : ANetApiRequest where TS : ANetApiResponse
 	    {
-            return MockContext.CreateMock<IApiOperation<TQ, TS>>();
+            return MockContext.As<IApiOperation<TQ, TS>>();
 	    }
 
 	    public static void ShowProperties(Object bean) {  

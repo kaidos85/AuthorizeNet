@@ -8,6 +8,7 @@
     using AuthorizeNet.Api.Controllers.Test;
     using AuthorizeNet.Util;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class CreateCustomerProfileFromTransactionSampleTest : ApiCoreTestBase
@@ -57,20 +58,20 @@
             var createResponse = createController.ExecuteWithApiResponse();
 
             //validate
-            Assert.NotNull(createResponse);
-            Assert.NotNull(createResponse.messages);
-            Assert.AreEqual(messageTypeEnum.Ok, createResponse.messages.resultCode);
-            Assert.NotNull(createResponse.customerProfileId);
-            Assert.NotNull(createResponse.customerPaymentProfileIdList);
-            Assert.AreNotEqual(0, createResponse.customerPaymentProfileIdList.Length);
+            ClassicAssert.NotNull(createResponse);
+            ClassicAssert.NotNull(createResponse.messages);
+            ClassicAssert.AreEqual(messageTypeEnum.Ok, createResponse.messages.resultCode);
+            ClassicAssert.NotNull(createResponse.customerProfileId);
+            ClassicAssert.NotNull(createResponse.customerPaymentProfileIdList);
+            ClassicAssert.AreNotEqual(0, createResponse.customerPaymentProfileIdList.Length);
 
             long customerProfileId;
             long.TryParse(createResponse.customerProfileId, out customerProfileId);
-            Assert.AreNotEqual(0, customerProfileId);
+            ClassicAssert.AreNotEqual(0, customerProfileId);
 
             long customerPaymentProfileId;
             long.TryParse(createResponse.customerPaymentProfileIdList[0], out customerPaymentProfileId);
-            Assert.AreNotEqual(0, customerPaymentProfileId);
+            ClassicAssert.AreNotEqual(0, customerPaymentProfileId);
             //if shipping profile is added, shipping profile id will be retrieved too
         }
 
@@ -84,7 +85,7 @@
 
             //set up data based on transaction
             var transactionAmount = SetValidTransactionAmount(Counter);
-            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0622" };
+            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0628" };
             var aCustomer = new customerDataType { email = string.Format( "{0}@b.bla", Counter)};
 
             //standard api call to retrieve response
@@ -102,14 +103,14 @@
             var response = controller.GetApiResponse();
 
             //validate
-            Assert.NotNull(response);
-            Assert.NotNull(response.messages);
-            Assert.NotNull(response.transactionResponse);
-            Assert.AreEqual(messageTypeEnum.Ok, response.messages.resultCode);
-            Assert.False(string.IsNullOrEmpty(response.transactionResponse.transId));
+            ClassicAssert.NotNull(response);
+            ClassicAssert.NotNull(response.messages);
+            ClassicAssert.NotNull(response.transactionResponse);
+            ClassicAssert.AreEqual(messageTypeEnum.Ok, response.messages.resultCode);
+            ClassicAssert.False(string.IsNullOrEmpty(response.transactionResponse.transId));
             long transactionId;
             long.TryParse(response.transactionResponse.transId, out transactionId);
-            Assert.AreNotEqual(0, transactionId);
+            ClassicAssert.AreNotEqual(0, transactionId);
 
             return transactionId;
         }
@@ -146,7 +147,7 @@
             {
                 billTo = profileShipTo,
                 customerType = customerTypeEnum.individual,
-                payment = new paymentType { Item = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0622" } },
+                payment = new paymentType { Item = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0628" } },
             };
 
             var createProfileReq = new createCustomerProfileRequest
@@ -187,7 +188,7 @@
             var txnControlerResp = txnControler.GetApiResponse();
 
             //verify transaction succeeded.
-            Assert.AreEqual("1", txnControlerResp.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", txnControlerResp.transactionResponse.messages[0].code);
 
         }
     }

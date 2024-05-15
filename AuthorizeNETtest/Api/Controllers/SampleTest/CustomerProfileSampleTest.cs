@@ -7,7 +7,8 @@
     using AuthorizeNet.Api.Controllers.Test;
     using AuthorizeNet.Util;
     using NUnit.Framework;
-    
+    using NUnit.Framework.Legacy;
+
     [TestFixture]
     class CustomerProfileSampleTest: ApiCoreTestBase {
 
@@ -75,7 +76,7 @@
             //create a customer profile
             var createController = new createCustomerProfileController(createRequest);
             var createResponse = createController.ExecuteWithApiResponse();
-            Assert.NotNull(createResponse);
+            ClassicAssert.NotNull(createResponse);
             LogHelper.info(Logger, "Created Customer profile : {0}", createResponse.customerProfileId);
 
             var getProfileListRequest = new getCustomerPaymentProfileListRequest
@@ -109,7 +110,7 @@
                 System.Threading.Thread.Sleep(10000);
             }
 
-            Assert.IsTrue(found);
+            ClassicAssert.IsTrue(found);
             
 			//delete the created customer profile
 			var deleteRequest = new deleteCustomerProfileRequest
@@ -119,7 +120,7 @@
             };
             var deleteController = new deleteCustomerProfileController(deleteRequest);
             var deleteResponse = deleteController.ExecuteWithApiResponse();
-            Assert.IsNotNull(deleteResponse);
+            ClassicAssert.IsNotNull(deleteResponse);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace AuthorizeNet.Api.Controllers.MockTest
     using AuthorizeNet.Api.Controllers.Test;
     using AuthorizeNet.Util;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class getCustomerPaymentProfileListTest : ApiCoreTestBase 
@@ -105,15 +106,15 @@ namespace AuthorizeNet.Api.Controllers.MockTest
             const messageTypeEnum messageTypeOk = messageTypeEnum.Ok;
 
             SetMockControllerExpectations<getCustomerPaymentProfileListRequest, getCustomerPaymentProfileListResponse, getCustomerPaymentProfileListController>(
-                mockController.MockObject, mockRequest, mockResponse, errorResponse, results, messageTypeOk);
-            mockController.MockObject.Execute(AuthorizeNet.Environment.CUSTOM);
-            //mockController.MockObject.Execute();
-            // or var controllerResponse = mockController.MockObject.ExecuteWithApiResponse(AuthorizeNet.Environment.CUSTOM);
-            var controllerResponse = mockController.MockObject.GetApiResponse();
-            Assert.IsNotNull(controllerResponse);
+                mockController.Object, mockRequest, mockResponse, errorResponse, results, messageTypeOk);
+            mockController.Object.Execute(AuthorizeNet.Environment.CUSTOM);
+            //mockController.Object.Execute();
+            // or var controllerResponse = mockController.Object.ExecuteWithApiResponse(AuthorizeNet.Environment.CUSTOM);
+            var controllerResponse = mockController.Object.GetApiResponse();
+            ClassicAssert.IsNotNull(controllerResponse);
 
-		    Assert.IsNotNull(controllerResponse.totalNumInResultSet);
-            Assert.IsNotNull(controllerResponse.paymentProfiles);
+		    ClassicAssert.IsNotNull(controllerResponse.totalNumInResultSet);
+            ClassicAssert.IsNotNull(controllerResponse.paymentProfiles);
 
             LogHelper.info(Logger, "getCustomerPaymentProfileList: Details:{0}", controllerResponse.paymentProfiles);
 	    }

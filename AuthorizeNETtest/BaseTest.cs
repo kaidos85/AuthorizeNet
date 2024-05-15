@@ -4,6 +4,7 @@ using System.Configuration;
 using AuthorizeNet.Util;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using AuthorizeNet.Utility;
 
 namespace AuthorizeNETtest
 {
@@ -34,8 +35,9 @@ namespace AuthorizeNETtest
         /// </summary>
         protected string CheckApiLoginTransactionKey()
         {
-            ApiLogin = _configuration["AppSettings:" + AuthorizeNet.Util.Constants.PropApiLoginid];
-            TransactionKey = _configuration["AppSettings:" + AuthorizeNet.Util.Constants.PropTransactionKey];
+            var section = _configuration.GetSection("AppSettings");
+            ApiLogin = section[AuthorizeNet.Util.Constants.PropApiLoginid];
+            TransactionKey = section[AuthorizeNet.Util.Constants.PropTransactionKey];
 
             string sRet = "";
             if ((string.IsNullOrEmpty(ApiLogin)) || (ApiLogin.Trim().Length == 0)

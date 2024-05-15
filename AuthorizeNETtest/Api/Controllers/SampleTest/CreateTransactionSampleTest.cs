@@ -9,6 +9,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
     using AuthorizeNet.Api.Controllers.Test;
     using AuthorizeNet.Util;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class CreateTransactionSampleTest : ApiCoreTestBase
@@ -69,17 +70,17 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var createResponse = createController.GetApiResponse();
 
             //Test response
-            Assert.IsNotNull(createResponse.transactionResponse);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse);
             LogHelper.info(Logger, "Response: {0}", createResponse);
             DisplayResponse(createResponse, "Create Transaction Response");
             LogHelper.info(Logger, "Created Transaction: {0}", createResponse.transactionResponse);
-            Assert.IsNotNull(createResponse.transactionResponse.transId);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse.transId);
             long transId;
-            Assert.IsTrue( long.TryParse(createResponse.transactionResponse.transId, out transId));
+            ClassicAssert.IsTrue( long.TryParse(createResponse.transactionResponse.transId, out transId));
             if (0 == transId)
             {
                 ValidateFailure<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
-                Assert.IsNotNull(createResponse.transactionResponse.errors);
+                ClassicAssert.IsNotNull(createResponse.transactionResponse.errors);
                 foreach (var error in createResponse.transactionResponse.errors)
                 {
                     LogHelper.info(Logger, "Error-> Code:{0}, Text:{1}", error.errorCode, error.errorText);
@@ -87,7 +88,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             }
             else
             {
-                Assert.AreNotEqual(0, transId);
+                ClassicAssert.AreNotEqual(0, transId);
                 ValidateSuccess<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
             }
         }
@@ -107,7 +108,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             // Use CIM to create the profile we're going to charge
             var customerProfileId = "0";
             var paymentProfileId = "0";
-            Assert.IsTrue(createProfile(out customerProfileId, out paymentProfileId));
+            ClassicAssert.IsTrue(createProfile(out customerProfileId, out paymentProfileId));
 
             //create a customer payment profile
             customerProfilePaymentType profileToCharge = new customerProfilePaymentType();
@@ -131,17 +132,17 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var createResponse = createController.GetApiResponse();
 
             //test response
-            Assert.IsNotNull(createResponse.transactionResponse);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse);
             LogHelper.info(Logger, "Response: {0}", createResponse);
             DisplayResponse(createResponse, "Create Transaction Response");
             LogHelper.info(Logger, "Created Transaction: {0}", createResponse.transactionResponse);
-            Assert.IsNotNull(createResponse.transactionResponse.transId);
+            ClassicAssert.IsNotNull(createResponse.transactionResponse.transId);
             long transId;
-            Assert.IsTrue(long.TryParse(createResponse.transactionResponse.transId, out transId));
+            ClassicAssert.IsTrue(long.TryParse(createResponse.transactionResponse.transId, out transId));
             if (0 == transId)
             {
                 ValidateFailure<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
-                Assert.IsNotNull(createResponse.transactionResponse.errors);
+                ClassicAssert.IsNotNull(createResponse.transactionResponse.errors);
                 foreach (var error in createResponse.transactionResponse.errors)
                 {
                     LogHelper.info(Logger, "Error-> Code:{0}, Text:{1}", error.errorCode, error.errorText);
@@ -149,7 +150,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             }
             else
             {
-                Assert.AreNotEqual(0, transId);
+                ClassicAssert.AreNotEqual(0, transId);
                 ValidateSuccess<createTransactionRequest, createTransactionResponse, createTransactionController>(createController, createResponse);
             }
         }
@@ -190,9 +191,9 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             }
             else
             {
-                Assert.NotNull(createResponse.customerProfileId);
-                Assert.NotNull(createResponse.customerPaymentProfileIdList);
-                Assert.AreNotEqual(0, createResponse.customerPaymentProfileIdList.Length);
+                ClassicAssert.NotNull(createResponse.customerProfileId);
+                ClassicAssert.NotNull(createResponse.customerPaymentProfileIdList);
+                ClassicAssert.AreNotEqual(0, createResponse.customerPaymentProfileIdList.Length);
 
                 customerProfileId = createResponse.customerProfileId;
                 paymentProfileId = createResponse.customerPaymentProfileIdList[0];
@@ -210,7 +211,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
 
             //set up data for transaction
             var transactionAmount = SetValidTransactionAmount(Counter);
-            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0622" };
+            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0628" };
 
             //standard api call to retrieve response
             var paymentType = new paymentType {Item = creditCard};
@@ -226,7 +227,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", response.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -265,7 +266,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", response.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -306,7 +307,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", response.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -344,7 +345,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //validate. The code 2000 is: Need the payer's consent.
-            Assert.AreEqual("2000", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("2000", response.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -364,7 +365,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
 
             if (txnToCredit == "Not Set")
             {
-                Assert.Fail("This test requires that you set txnToCredit to the transaction ID of a settled credit card transaction");
+                ClassicAssert.Fail("This test requires that you set txnToCredit to the transaction ID of a settled credit card transaction");
             }
 
 
@@ -378,7 +379,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var gtdResp = gtdCont.GetApiResponse();
 
             //Test the transaction before continuing
-            Assert.AreEqual(messageTypeEnum.Ok, gtdResp.messages.resultCode);
+            ClassicAssert.AreEqual(messageTypeEnum.Ok, gtdResp.messages.resultCode);
 
             txnAmount = gtdResp.transaction.settleAmount;
             txnCardNo = ((AuthorizeNet.Api.Contracts.V1.creditCardMaskedType)(gtdResp.transaction.payment.Item)).cardNumber;
@@ -402,7 +403,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             createTransactionResponse creditResp = creditCont.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", creditResp.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", creditResp.transactionResponse.messages[0].code);
         }
 
         //Tests execution of credit without a linked transaction.
@@ -415,7 +416,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             decimal txnAmount = SetValidTransactionAmount(Counter) / 100;
 
             //Set payment info for credit
-            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0622" };
+            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0628" };
             var paymentType = new paymentType { Item = creditCard };
 
             //Create credit request
@@ -433,7 +434,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             createTransactionResponse creditResp = creditCont.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", creditResp.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", creditResp.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -445,7 +446,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
 
             //set up data based on transaction
             var transactionAmount = SetValidTransactionAmount(Counter);
-            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0622" };
+            var creditCard = new creditCardType { cardNumber = "4111111111111111", expirationDate = "0628" };
 
             //Build auth only transaction request.
             var paymentType = new paymentType { Item = creditCard };
@@ -493,7 +494,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var capResponse = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", capResponse.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", capResponse.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -526,7 +527,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var createResponse = createController.GetApiResponse();
 
             //Validate error code where request is submitted properly, but request fails.
-            Assert.AreEqual("6", createResponse.transactionResponse.errors[0].errorCode);
+            ClassicAssert.AreEqual("6", createResponse.transactionResponse.errors[0].errorCode);
 
             //Validate error code where submission of request fails.
             ((creditCardType)transactionRequestType.payment.Item).cardNumber = "01";
@@ -536,7 +537,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             if (createController.GetApiResponse() == null)
             {
                 var errorResponse = createController.GetErrorResponse();
-                Assert.AreEqual("E00003", errorResponse.messages.message[0].code);
+                ClassicAssert.AreEqual("E00003", errorResponse.messages.message[0].code);
             }
         }
     }

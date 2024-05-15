@@ -1,3 +1,4 @@
+using AuthorizeNet;
 using AuthorizeNet.Utility;
 
 namespace AuthorizeNet.Api.Controllers.Test
@@ -10,6 +11,7 @@ namespace AuthorizeNet.Api.Controllers.Test
     using AuthorizeNet.Util;
     using NUnit.Framework;
     using System.Linq;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class ArbSubscriptionTest : ApiCoreTestBase {
@@ -63,7 +65,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 
 		    var subscriptionId = CreateSubscription( CustomMerchantAuthenticationType, referenceTxnId);
 		    var newStatus = GetSubscription( CustomMerchantAuthenticationType, subscriptionId);
-		    Assert.AreEqual(ARBSubscriptionStatusEnum.active, newStatus);
+		    ClassicAssert.AreEqual(ARBSubscriptionStatusEnum.active, newStatus);
 
 		    LogHelper.info(Logger, "Getting Subscription List for SubscriptionId: {0}", subscriptionId);
             
@@ -88,12 +90,12 @@ namespace AuthorizeNet.Api.Controllers.Test
                 }
             }
 
-            Assert.IsTrue(found);
+            ClassicAssert.IsTrue(found);
 		    CancelSubscription(CustomMerchantAuthenticationType, subscriptionId);
             
 		    //validate the status of subscription to make sure it is canceled
 		    var cancelStatus = GetSubscription(CustomMerchantAuthenticationType, subscriptionId);
-		    Assert.AreEqual(ARBSubscriptionStatusEnum.canceled, cancelStatus);
+		    ClassicAssert.AreEqual(ARBSubscriptionStatusEnum.canceled, cancelStatus);
 	    }
 
 	    [Test]
@@ -133,7 +135,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 
             var arbCreateResponse = arbController.GetApiResponse();
 
-            Assert.AreEqual(messageTypeEnum.Ok,arbController.GetResultCode());
+            ClassicAssert.AreEqual(messageTypeEnum.Ok,arbController.GetResultCode());
 
 	    }
 
@@ -210,8 +212,7 @@ namespace AuthorizeNet.Api.Controllers.Test
         /// commenting the test attribute because issue is fixed.
         /// @Zalak
         /// </summary>
-       // [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "SearchType cannot be null")]
+       // [Test]        
         public void GetSubscriptionSearchCardExpiringThisMonthIssueTest()
         {
            var getSubscriptionList = new ARBGetSubscriptionListRequest()
@@ -223,7 +224,7 @@ namespace AuthorizeNet.Api.Controllers.Test
            ApiOperationBase<ANetApiRequest, ANetApiResponse>.MerchantAuthentication = CustomMerchantAuthenticationType;
            ApiOperationBase<ANetApiRequest, ANetApiResponse>.RunEnvironment = TestEnvironment;
             var nullController = new ARBGetSubscriptionListController(getSubscriptionList);
-            Assert.IsNull( nullController, "Controller should not be instantiated.");
+            ClassicAssert.IsNull( nullController, "Controller should not be instantiated.");
         }
 
         /// <summary>
@@ -290,7 +291,7 @@ namespace AuthorizeNet.Api.Controllers.Test
             var arbGetSubscriptionListController = new ARBGetSubscriptionListController(getSubscriptionList);
             var arbGetSubscriptionListResponse = arbGetSubscriptionListController.ExecuteWithApiResponse();
 
-            Assert.IsNotNull(arbGetSubscriptionListResponse);
+            ClassicAssert.IsNotNull(arbGetSubscriptionListResponse);
         }
 
         private ARBGetSubscriptionListResponse GetSubscriptionListResponse(int limitNo, int offSetNo)
@@ -342,11 +343,11 @@ namespace AuthorizeNet.Api.Controllers.Test
                     expectedSubscriptionNo = subscriptionDetailsOnLastPage;
                 }
                 response = GetSubscriptionListResponse(limitNo, offSetNo);
-                Assert.AreEqual(expectedSubscriptionNo, response.subscriptionDetails.Count());
+                ClassicAssert.AreEqual(expectedSubscriptionNo, response.subscriptionDetails.Count());
             }
             else
             {
-                Assert.Null(arbGetSubscriptionListResponse);
+                ClassicAssert.Null(arbGetSubscriptionListResponse);
             }   
             
         }
@@ -405,7 +406,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 		            subscriptionId = subscriptionId
 		        };
 	        var cancelResponse = ExecuteTestRequestWithSuccess<ARBCancelSubscriptionRequest, ARBCancelSubscriptionResponse, ARBCancelSubscriptionController>(cancelRequest, TestEnvironment);
-		    Assert.IsNotNull(cancelResponse.messages);
+            ClassicAssert.IsNotNull(cancelResponse.messages);
 		    Logger.info(String.Format("Subscription Cancelled: {0}", subscriptionId));
 	    }
 
@@ -418,7 +419,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 		            subscriptionId = subscriptionId
 		        };
 	        var getResponse = ExecuteTestRequestWithSuccess<ARBGetSubscriptionStatusRequest, ARBGetSubscriptionStatusResponse, ARBGetSubscriptionStatusController>(getRequest, TestEnvironment);
-		    Assert.IsNotNull(getResponse.status);
+            ClassicAssert.IsNotNull(getResponse.status);
 		    Logger.info(String.Format("Subscription Status: {0}", getResponse.status));
 		    return getResponse.status;
 	    }
@@ -438,7 +439,7 @@ namespace AuthorizeNet.Api.Controllers.Test
 		        };
 
 	        var createResponse = ExecuteTestRequestWithSuccess<ARBCreateSubscriptionRequest, ARBCreateSubscriptionResponse, ARBCreateSubscriptionController>(createRequest, TestEnvironment);
-		    Assert.IsNotNull(createResponse.subscriptionId);
+		    ClassicAssert.IsNotNull(createResponse.subscriptionId);
 		    LogHelper.info( Logger, "Created Subscription: {0}", createResponse.subscriptionId);
 
 		    return createResponse.subscriptionId;

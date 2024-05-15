@@ -8,7 +8,9 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
     using AuthorizeNet.Api.Controllers.Bases;
     using AuthorizeNet.Api.Controllers.Test;
     using AuthorizeNet.Util;
+    using AuthorizeNet.Utility;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class CreateECheckTransactionSampleTest : ApiCoreTestBase
@@ -63,7 +65,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", response.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -91,7 +93,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", response.transactionResponse.messages[0].code);
         }
 
 
@@ -153,7 +155,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var response = controller.GetApiResponse();
 
             //Verify that transaction was accepted and save the transaction ID
-            Assert.AreEqual(messageTypeEnum.Ok, response.messages.resultCode);
+            ClassicAssert.AreEqual(messageTypeEnum.Ok, response.messages.resultCode);
             string txnID = response.transactionResponse.transId;
 
 
@@ -164,7 +166,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             createCustomerProfileFromTransactionController profileFromTrxnController = new createCustomerProfileFromTransactionController(profileFromTransReq);
             profileFromTrxnController.Execute();
             createCustomerProfileResponse createProfResp = profileFromTrxnController.GetApiResponse();
-            Assert.AreEqual(messageTypeEnum.Ok, createProfResp.messages.resultCode);
+            ClassicAssert.AreEqual(messageTypeEnum.Ok, createProfResp.messages.resultCode);
 
             //Get customer profile and verify that profile data matches the data submitted with the transaction
             getCustomerProfileRequest profileReq = new getCustomerProfileRequest
@@ -177,7 +179,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var getCustResp = getCustContr.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", response.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", response.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -196,7 +198,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
 
             if (txnToCredit == "Not Set")
             {
-                Assert.Fail("This test requires that you set txnToCredit to the transaction ID of a settled eCheck card transaction");
+                ClassicAssert.Fail("This test requires that you set txnToCredit to the transaction ID of a settled eCheck card transaction");
             }
 
 
@@ -232,7 +234,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             createTransactionResponse creditResp = creditCont.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", creditResp.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", creditResp.transactionResponse.messages[0].code);
         }
 
         [Test]
@@ -298,7 +300,7 @@ namespace AuthorizeNet.Api.Controllers.SampleTest
             var capResponse = controller.GetApiResponse();
 
             //validate
-            Assert.AreEqual("1", capResponse.transactionResponse.messages[0].code);
+            ClassicAssert.AreEqual("1", capResponse.transactionResponse.messages[0].code);
         }
     }
 }

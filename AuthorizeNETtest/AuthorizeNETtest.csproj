@@ -14,6 +14,9 @@
     <OutputPath>bin/Debug</OutputPath>
     <NoWarn>0219,1591,1635</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+	<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin/Release</OutputPath>
   </PropertyGroup>
@@ -29,17 +32,84 @@
     <ProjectReference Include="..\Authorize.NET\AuthorizeNET.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Test References\" />
+	<Compile Include="BaseTest.cs" />
+	<Compile Include="UnitTestData.cs" />
+	<Compile Include="WebRequestLocal.cs" />
+	<Compile Include="Api\Controllers\MockTest\ARBGetSubscriptionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getCustomerPaymentProfileListControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getHostedPaymentPageControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getMerchantDetailsControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\securePaymentContainerControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\updateHeldTransactionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\updateMerchantDetailsControllerTest.cs" />
+	<Compile Include="Api\Controllers\SampleTest\CustomerProfileSampleTest.cs" />
+	<Compile Include="Api\Controllers\Test\*.cs" />
+	<EmbeddedResource Remove="NMock3\**" />
+	<EmbeddedResource Remove="Test References\**" />
+	<None Remove="NMock3\**" />
+	<None Remove="Test References\**" />
+	<Compile Include="Api\Controllers\MockTest\ARBCancelSubscriptionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\ARBCreateSubscriptionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\ARBGetSubscriptionListControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\ARBGetSubscriptionStatusControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\ARBUpdateSubscriptionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\authenticateTestControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createCustomerPaymentProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createCustomerProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createCustomerProfileFromTransactionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createCustomerProfileTransactionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createCustomerShippingAddressControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\createTransactionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\decryptPaymentDataControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\deleteCustomerPaymentProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\deleteCustomerProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\deleteCustomerShippingAddressControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getBatchStatisticsControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getCustomerPaymentProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getCustomerProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getCustomerProfileIdsControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getCustomerShippingAddressControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getHostedProfilePageControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getSettledBatchListControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getTransactionDetailsControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getTransactionListControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\getUnsettledTransactionListControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\isAliveControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\logoutControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\mobileDeviceLoginControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\mobileDeviceRegistrationControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\sendCustomerTransactionReceiptControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\transactionControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\updateCustomerPaymentProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\updateCustomerProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\updateCustomerShippingAddressControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\updateSplitTenderGroupControllerTest.cs" />
+	<Compile Include="Api\Controllers\MockTest\validateCustomerPaymentProfileControllerTest.cs" />
+	<Compile Include="Api\Controllers\SampleTest\ArbSubscriptionSampleTest.cs" />
+	<Compile Include="Api\Controllers\SampleTest\CreateCustomerProfileFromTransactionSampleTest.cs" />
+	<Compile Include="Api\Controllers\SampleTest\CreateTransactionSampleTest.cs" />
+	<Compile Include="Api\Controllers\SampleTest\eCheckTransactionSampleTest.cs" />
+	<Compile Include="Api\Controllers\SampleTest\ErrorMessagesSampleTest.cs" />
+	<Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.TestPlatform" Version="17.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="NUnit" Version="4.1.0" />
-    <PackageReference Include="NUnitTestAdapter.WithFramework" Version="2.0.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
-  </ItemGroup>  
+  </ItemGroup>
+  <ItemGroup>
+	<None Include="Api\ControllerTemplateTest.cst" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

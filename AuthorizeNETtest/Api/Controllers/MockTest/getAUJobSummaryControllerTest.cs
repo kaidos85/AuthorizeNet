@@ -62,9 +62,9 @@ namespace AuthorizeNet.Api.Controllers.MockTest
             //mockController.MockObject.Execute();
             // or var controllerResponse = mockController.MockObject.ExecuteWithApiResponse(AuthorizeNet.Environment.CUSTOM);
             var controllerResponse = mockController.MockObject.GetApiResponse();
-            Assert.IsNotNull(controllerResponse);
+            ClassicAssert.IsNotNull(controllerResponse);
 
-		    Assert.IsNotNull(controllerResponse.Yyyyy);
+		    ClassicAssert.IsNotNull(controllerResponse.Yyyyy);
 		    LogHelper.info(Logger, "getAUJobSummary: Details:{0}", controllerResponse.Yyyyy);
 	    }
     }
